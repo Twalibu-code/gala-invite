@@ -117,8 +117,8 @@ export default async function Home() {
               <p className="pb-1 text-xs font-bold text-plum-deep">Scan to donate</p>
             </div>
           </div>
-          <ul className="relative mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/20 pt-4 text-sm">
-            <li><a className="inline-flex items-center gap-2 hover:underline" href={`tel:${d.phoneTel}`}><Icon name="phone" className="h-4 w-4" />{d.phoneLabel}</a></li>
+          <ul className="relative mt-6 flex flex-wrap flex-col gap-y-2 border-t border-white/20 pt-4 text-sm">
+            <li><a className="inline-flex items-center gap-2 hover:underline" href={`tel:${d.phoneTel}`}><Icon name="phone" className="h-4 w-4" />Dr. Adelphina Ncheye:&nbsp;{d.phoneLabel}&nbsp;(Head of Programs, HTAF)</a></li>
             <li><a className="inline-flex items-center gap-2 hover:underline" href={d.websiteUrl} target="_blank" rel="noopener noreferrer"><Icon name="globe" className="h-4 w-4" />{d.websiteLabel}</a></li>
             <li><a className="inline-flex items-center gap-2 hover:underline" href={d.instagramUrl} target="_blank" rel="noopener noreferrer"><Icon name="instagram" className="h-4 w-4" />{d.instagramHandle}</a></li>
           </ul>

@@ -11,8 +11,8 @@ export const event = {
   durationHours: 4,
   dateLabel: "Friday, 4 December 2026",
   timeLabel: "From 18:00",
-  venue: "Malaika Beach Hotel, Mwanza",
-  mapQuery: "Malaika Beach Hotel Mwanza",
+  venue: "Malaika Beach Resort, Mwanza",
+  mapQuery: "Malaika Beach Resort, Mwanza",
   dressCode: "To be confirmed",
   guestGoal: 50, // placeholder target, change to your real goal
   rsvpFormUrl:
