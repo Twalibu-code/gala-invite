@@ -130,7 +130,10 @@ export default async function Home() {
           <a className={`${btn} bg-white text-plum-deep shadow-soft hover:bg-aqua-mist`} href={`https://wa.me/${event.coordinatorWhatsApp}`} target="_blank" rel="noopener noreferrer">Message the event coordinator</a>
         </section>
 
-        <footer className="pt-2 text-sm text-plum-dark/60">{event.partners}</footer>
+        <footer className="pt-8 text-sm flex flex-col text-plum-dark/60 text-center gap-0.5">
+          <p>{event.partners} | {<i className="text-plum-deep">{event.developer}</i>}</p>
+          <p>© {new Date().getFullYear()} {event.footer}</p>
+        </footer>
       </div>
     </main>
   );

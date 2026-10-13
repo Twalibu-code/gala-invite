@@ -3,6 +3,8 @@ export const event = {
   title: "Little Hearts, Big Hope",
   kicker: "Gala Dinner",
   motto: "Kutoa ni Moyo",
+  footer: "Heart Team Africa Foundation. All rights reserved.",
+  developer: "developed by HTAF Tech Team",
   tagline:
     "A charity evening raising voluntary contributions for children with heart conditions, through JKCI and the Heart Team Africa Foundation (HTAF).",
   cause:
