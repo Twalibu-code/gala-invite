@@ -31,7 +31,7 @@ export default async function Home() {
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-plum-deep/60 blur-3xl" />
         <div className="relative mx-auto max-w-3xl px-5 pb-28 pt-8">
           <div className="flex justify-between items-center">
-            <Image src="/htaf.png" alt="Heart Team Africa Foundation main logo" width={343} height={118}
+            <Image src="/jkci.png" alt="Heart Team Africa Foundation main logo" width={343} height={118}
                   priority className="h-14 w-auto sm:h-16" />
             <Image src="/htaf-logo.jpg" alt="Heart Team Africa Foundation, Kutoa ni Moyo" width={343} height={118}
                   priority className="h-14 w-auto rounded-2xl shadow-lg sm:h-16" />
