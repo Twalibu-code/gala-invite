@@ -32,17 +32,19 @@ export default async function Home() {
         <div className="relative mx-auto max-w-3xl px-5 pb-28 pt-8">
           <div className="flex justify-between items-center">
             <Image src="/jkci.png" alt="Heart Team Africa Foundation main logo" width={343} height={118}
-                  priority className="h-14 w-auto sm:h-16" />
+                  priority className="h-14 w-auto sm:h-16 bg-white rounded-md px-2 py-1" />
             <Image src="/htaf-logo.jpg" alt="Heart Team Africa Foundation, Kutoa ni Moyo" width={343} height={118}
                   priority className="h-14 w-auto rounded-2xl shadow-lg sm:h-16" />
           </div>
           <p className="mt-10 inline-block rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur">
-            {event.kicker} · {event.dateLabel}
+            {event.kicker} · {event.region} · {event.dateLabel}
           </p>
           <h1 className="mt-4 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">{event.title}</h1>
+          <h2 className="mt-2 text-3xl font-bold leading-[1.05] tracking-tight sm:text-5xl">{event.subtitle}</h2>
+          <h3 className="mt-2 text-xl font-extralight leading-[1.05] tracking-widest sm:text-3xl">{event.subsubtitle}</h3>
           <p className="mt-5 max-w-xl text-lg text-white/90">{event.tagline}</p>
           <div className="mt-8">
-            <div className="flex justify-center items-center text-lg font-extralight">Time Left to the GALA DINNER</div>
+            <div className="flex justify-center items-center text-lg font-extralight tracking-widest">Starts in</div>
             <Countdown target={event.startISO} />
           </div>
           <div className="mt-8 flex gap-2">
@@ -67,7 +69,7 @@ export default async function Home() {
               <div key={x.k} className="flex items-start gap-3">
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-plum to-aqua-blue text-white">
                   <Icon name={x.icon} />
-                </span>
+                </span> 
                 <div>
                   <dt className="text-sm text-plum-dark/60">{x.k}</dt>
                   <dd className="font-bold">{x.v}</dd>
@@ -82,7 +84,7 @@ export default async function Home() {
         </section>
 
         {/* IMPACT */}
-        <section aria-labelledby="cause" className="rounded-3xl bg-white p-6 shadow-soft sm:p-8">
+        <section aria-labelledby="cause" className="rounded-3xl bg-gradient-to-br from-plum-deep/10 via-plum/20 to-plum-deep/40 p-6 shadow-soft sm:p-8">
           <h2 id="cause" className="text-xl font-extrabold">Why we gather</h2>
           <p className="mt-4 bg-gradient-to-r from-plum to-aqua-blue bg-clip-text text-6xl font-extrabold text-transparent">{event.impact.number}</p>
           <p className="mt-1 text-lg font-semibold">{event.impact.text}</p>
@@ -99,7 +101,7 @@ export default async function Home() {
           <div className="relative grid gap-6 sm:grid-cols-[1fr_auto] sm:items-center">
             <div>
               <h2 id="give" className="text-2xl font-extrabold">{event.motto}</h2>
-              <p className="mt-1 text-white/85">Give from the heart. Every contribution is voluntary and goes to children's heart care.</p>
+              <p className="mt-1 text-white/85">Give from the heart. Every contribution goes to children's heart care.</p>
               <p className="mt-5 text-sm text-white/75">{d.networkLabel}</p>
               <p className="text-4xl font-extrabold tracking-widest tabular-nums">{d.lipaNumber}</p>
               <p className="mt-1 text-sm font-semibold">{d.lipaName}</p>
@@ -118,9 +120,9 @@ export default async function Home() {
             </div>
           </div>
           <ul className="relative mt-6 flex flex-wrap flex-col gap-y-2 border-t border-white/20 pt-4 text-sm">
-            <li><a className="inline-flex items-center gap-2 hover:underline" href={`tel:${d.phoneTel}`}><Icon name="phone" className="h-4 w-4" />Dr. Adelphina Ncheye:&nbsp;{d.phoneLabel}&nbsp;(Head of Programs, HTAF)</a></li>
-            <li><a className="inline-flex items-center gap-2 hover:underline" href={d.websiteUrl} target="_blank" rel="noopener noreferrer"><Icon name="globe" className="h-4 w-4" />{d.websiteLabel}</a></li>
-            <li><a className="inline-flex items-center gap-2 hover:underline" href={d.instagramUrl} target="_blank" rel="noopener noreferrer"><Icon name="instagram" className="h-4 w-4" />{d.instagramHandle}</a></li>
+            <li><a className="inline-flex items-center gap-2 hover:underline hover:scale-105 transition-all" href={`tel:${d.phoneTel}`}><Icon name="phone" className="h-4 w-4" />Dr. Adelphina Ncheye:&nbsp;{d.phoneLabel}&nbsp;(Head of Programs, HTAF)</a></li>
+            <li><a className="inline-flex items-center gap-2 hover:underline hover:scale-105 transition-all" href={d.websiteUrl} target="_blank" rel="noopener noreferrer"><Icon name="globe" className="h-4 w-4" />{d.websiteLabel}</a></li>
+            <li><a className="inline-flex items-center gap-2 hover:underline hover:scale-105 transition-all" href={d.instagramUrl} target="_blank" rel="noopener noreferrer"><Icon name="instagram" className="h-4 w-4" />{d.instagramHandle}</a></li>
           </ul>
         </section>
 
