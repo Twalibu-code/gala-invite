@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { event } from "@/config/event";
 import { getStats } from "@/lib/sheets";
-import { googleCalendarUrl, mapsUrl, whatsappShareUrl } from "@/lib/calendar";
+import { googleCalendarUrl, mapsUrl } from "@/lib/calendar";
 import Countdown from "@/components/Countdown";
 import Progress from "@/components/Progress";
 import CopyButton from "@/components/CopyButton";
+import ShareButton from "@/components/ShareButton";
 import Icon from "@/components/Icon";
 
 // Re-generate this page at most once a minute, so numbers follow the Google Sheet.
@@ -14,8 +15,9 @@ const btn = "inline-flex items-center justify-center gap-2 rounded-full px-6 py-
 
 export default async function Home() {
   const stats = await getStats();
-  const site = process.env.NEXT_PUBLIC_SITE_URL || "";
   const d = event.donation;
+  // The public counter stays hidden until enough guests have confirmed (admin view: /admin).
+  const showCounter = stats.configured && stats.totalGuests >= event.showCounterAfter;
   const details = [
     { icon: "calendar", k: "Date", v: event.dateLabel },
     { icon: "clock", k: "Time", v: event.timeLabel },
@@ -31,22 +33,19 @@ export default async function Home() {
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-plum-deep/60 blur-3xl" />
         <div className="relative mx-auto max-w-3xl px-5 pb-28 pt-8">
           <div className="flex justify-between items-center">
-            <Image src="/jkci.png" alt="Heart Team Africa Foundation main logo" width={343} height={118}
-                  priority className="h-14 w-auto sm:h-16 bg-white rounded-md px-2 py-1" />
+            <Image src="/jkci.png" alt="Jakaya Kikwete Cardiac Institute (JKCI)" width={343} height={118}
+                  priority className="h-14 w-auto sm:h-16 rounded-xl bg-white p-2 shadow-lg" />
             <Image src="/htaf-logo.jpg" alt="Heart Team Africa Foundation, Kutoa ni Moyo" width={343} height={118}
-                  priority className="h-14 w-auto rounded-2xl shadow-lg sm:h-16" />
+                  priority className="h-14 w-auto rounded-xl shadow-lg sm:h-16" />
           </div>
           <p className="mt-10 inline-block rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur">
-            {event.kicker} · {event.region} · {event.dateLabel}
+            {event.kicker} · {event.region} · {event.dateShort}
           </p>
           <h1 className="mt-4 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">{event.title}</h1>
           <h2 className="mt-2 text-3xl font-bold leading-[1.05] tracking-tight sm:text-5xl">{event.subtitle}</h2>
           <h3 className="mt-2 text-xl font-extralight leading-[1.05] tracking-widest sm:text-3xl">{event.subsubtitle}</h3>
           <p className="mt-5 max-w-xl text-lg text-white/90">{event.tagline}</p>
-          <div className="mt-8">
-            <div className="flex justify-center items-center text-lg font-extralight tracking-widest">Starts in</div>
-            <Countdown target={event.startISO} />
-          </div>
+          <Countdown target={event.startISO} label="Starts in" />
           <div className="mt-8 flex gap-2">
             <a href={event.rsvpFormUrl} target="_blank" rel="noopener noreferrer"
                className={`${btn} bg-white text-plum-deep shadow-lg hover:bg-aqua-mist w-2/3`}>RSVP now</a>
@@ -60,7 +59,7 @@ export default async function Home() {
         </svg>
       </header>
 
-      <div className="mx-auto -mt-12 max-w-3xl space-y-6 px-5 pb-16">
+      <div className="mx-auto -mt-12 max-w-3xl space-y-6 px-5 pb-[calc(7rem+env(safe-area-inset-bottom))]">
         {/* DETAILS */}
         <section aria-labelledby="details" className="relative rounded-3xl bg-white p-6 shadow-soft sm:p-8">
           <h2 id="details" className="text-xl font-extrabold">Event details</h2>
@@ -92,44 +91,68 @@ export default async function Home() {
           <p className="mt-5 text-plum-dark/80">{event.cause}</p>
         </section>
 
-        <Progress stats={stats} goal={event.guestGoal} />
+        {showCounter && <Progress stats={stats} goal={event.guestGoal} hideCountries={event.hideChips} />}
 
         {/* DONATE */}
         <section id="donate" aria-labelledby="give"
                  className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-plum-deep via-plum to-plum-deep p-6 text-white shadow-soft sm:p-8">
           <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-aqua/30 blur-3xl" />
-          <div className="relative grid gap-6 sm:grid-cols-[1fr_auto] sm:items-center">
-            <div>
+          <div className="relative grid gap-x-8 gap-y-6 sm:grid-cols-[1fr_auto]">
+            <div className="sm:col-start-1 sm:row-start-1">
               <h2 id="give" className="text-2xl font-extrabold">{event.motto}</h2>
-              <p className="mt-1 text-white/85">Give from the heart. Every contribution goes to children's heart care.</p>
-              <p className="mt-5 text-sm text-white/75">{d.networkLabel}</p>
-              <p className="text-4xl font-extrabold tracking-widest tabular-nums">{d.lipaNumber}</p>
-              <p className="mt-1 text-sm font-semibold">{d.lipaName}</p>
-              <div className="mt-4 flex flex-wrap gap-3">
-                <CopyButton text={d.lipaNumber} label="Copy Lipa number" />
-                <a href={d.onlineUrl} target="_blank" rel="noopener noreferrer"
-                   className="rounded-full bg-gradient-to-r from-aqua to-aqua-blue px-5 py-1.5 text-sm font-bold text-plum-dark transition hover:brightness-110">
-                  Donate online
-                </a>
+              <p className="mt-2 text-white/90">{event.programme}</p>
+
+              <div className="mt-5 rounded-2xl border border-white/20 bg-white/10 p-5">
+                <p className="font-bold text-aqua">{d.anchor}</p>
+                <p className="mt-4 text-sm text-white/80">{d.networkLabel}</p>
+                <p className="mt-1 break-all text-4xl font-extrabold tabular-nums tracking-[0.14em] sm:text-5xl">{d.lipaNumber}</p>
+                <p className="mt-2 text-sm font-semibold">{d.lipaName}</p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <a href={d.onlineUrl} target="_blank" rel="noopener noreferrer"
+                     className="rounded-full bg-gradient-to-r from-aqua to-aqua-blue px-6 py-2 font-bold text-plum-dark transition hover:brightness-110">
+                    Donate online
+                  </a>
+                  <CopyButton text={d.lipaNumber} label="Copy number" />
+                </div>
+                <p className="mt-4 text-sm text-white/85">{d.howToPay}</p>
               </div>
             </div>
-            <div className="mx-auto w-40 rounded-2xl bg-white p-2 text-center shadow-lg">
+
+            {/* contacts (above the QR on phones) */}
+            <ul className="space-y-2 text-sm sm:col-start-1 sm:row-start-2">
+              <li className="flex flex-wrap gap-x-4 gap-y-1">
+                <a className="inline-flex items-center gap-2 font-semibold transition-all hover:underline" href={`tel:${d.phoneTel}`}>
+                  <Icon name="phone" className="h-4 w-4" />{d.hop} - {d.phoneLabel} 
+                </a>
+              </li>
+              <li>
+                <a className="inline-flex items-center gap-2 transition-all hover:underline" href={d.websiteUrl} target="_blank" rel="noopener noreferrer">
+                  <Icon name="globe" className="h-4 w-4" />{d.websiteLabel}
+                </a>
+              </li>
+              <li>
+                <a className="inline-flex items-center gap-2 transition-all hover:underline" href={d.instagramUrl} target="_blank" rel="noopener noreferrer">
+                  <Icon name="instagram" className="h-4 w-4" />{d.instagramHandle}
+                </a>
+              </li>
+            </ul>
+
+            {/* QR: small on phones (a phone cannot scan its own screen), full size on desktop, projector and print */}
+            <div className="mx-auto w-28 rounded-2xl bg-white p-2 text-center shadow-lg sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:w-44 sm:self-center print:w-64">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/qr-donate.svg" alt="QR code to donate online" width={144} height={144} className="h-auto w-full" />
-              <p className="pb-1 text-xs font-bold text-plum-deep">Scan to donate</p>
+              <img src="/qr-donate.svg" alt="QR code to donate online" className="h-auto w-full" />
+              <p className="pb-1 text-xs font-bold text-black">Scan to donate</p>
             </div>
           </div>
-          <ul className="relative mt-6 flex flex-wrap flex-col gap-y-2 border-t border-white/20 pt-4 text-sm">
-            <li><a className="inline-flex items-center gap-2 hover:underline hover:scale-105 transition-all" href={`tel:${d.phoneTel}`}><Icon name="phone" className="h-4 w-4" />Dr. Adelphina Ncheye:&nbsp;{d.phoneLabel}&nbsp;(Head of Programs, HTAF)</a></li>
-            <li><a className="inline-flex items-center gap-2 hover:underline hover:scale-105 transition-all" href={d.websiteUrl} target="_blank" rel="noopener noreferrer"><Icon name="globe" className="h-4 w-4" />{d.websiteLabel}</a></li>
-            <li><a className="inline-flex items-center gap-2 hover:underline hover:scale-105 transition-all" href={d.instagramUrl} target="_blank" rel="noopener noreferrer"><Icon name="instagram" className="h-4 w-4" />{d.instagramHandle}</a></li>
-          </ul>
         </section>
 
         {/* SHARE */}
-        <section className="flex flex-wrap gap-3">
-          <a className={`${btn} bg-plum-deep text-white hover:bg-plum-dark`} href={whatsappShareUrl(site)} target="_blank" rel="noopener noreferrer">Share on WhatsApp</a>
-          <a className={`${btn} bg-white text-plum-deep shadow-soft hover:bg-aqua-mist`} href={`https://wa.me/${event.coordinatorWhatsApp}`} target="_blank" rel="noopener noreferrer">Message the event coordinator</a>
+        <section className="flex flex-col gap-3">
+          <ShareButton className={`${btn} w-full bg-plum-deep text-white hover:bg-plum-dark`} />
+          <a className={`${btn} w-full bg-white text-plum-deep shadow-soft hover:bg-aqua-mist`}
+             href={`https://wa.me/${event.coordinatorWhatsApp}`} target="_blank" rel="noopener noreferrer">
+            Message the event coordinator
+          </a>
         </section>
 
         <footer className="pt-8 text-sm flex flex-col text-plum-dark/60 text-center gap-0.5">

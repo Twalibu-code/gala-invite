@@ -15,11 +15,17 @@ export const event = {
   startISO: "2026-12-04T18:00:00+03:00",
   durationHours: 4,
   dateLabel: "Fri, 4 Dec 2026",
+  dateShort: "Fri 4 Dec 2026", // used in the top pill and the WhatsApp share message
   timeLabel: "From 18:00",
   venue: "Malaika Beach Resort, Mwanza",
   mapQuery: "Malaika Beach Resort, Mwanza",
   dressCode: "To be confirmed",
   guestGoal: 500, // placeholder target, change to your real goal
+  showCounterAfter: 100, // public guest counter appears only once total guests reach this number
+  hideChips: ["Tanzania"], // countries never shown as chips on the public page
+  siteUrl: "https://gala-invite.vercel.app",
+  programme:
+    "Your gift supports a five-year programme to help 1,000 children with heart conditions. Guests can also pledge support for future years.",
   rsvpFormUrl:
     "https://docs.google.com/forms/d/e/1FAIpQLSfsMix48sw9iGuYcc1PFSyej_kAT_Tn2vM1wKzktCcxltnX9g/viewform",
   coordinatorWhatsApp: "255784311111", // digits only, with country code
@@ -30,16 +36,19 @@ export const event = {
     source: "Source: Heart Team Africa Foundation",
   },
   donation: {
+    anchor: "TZS 10 million covers one child's heart surgery",
     networkLabel: "SELCOM Lipa Number",
     lipaNumber: "70028106",
     lipaName: "HEART TEAM AFRICA FOUNDATION",
+    howToPay: "M-Pesa / Mixx / Airtel Money → Make Paymment → Pay Merchant → Selcom → Enter Selcom Pay Number 70028106",
     onlineUrl: "https://web.chapaa.co.tz/?ci=moyo",
-    phoneLabel: "+255747008980",
+    phoneLabel: "+255 747 008 980",
     phoneTel: "+255747008980",
     websiteLabel: "www.htafoundation.or.tz",
     websiteUrl: "https://www.htafoundation.or.tz",
     instagramUrl: "https://www.instagram.com/heartteamafrica",
-    instagramHandle: "heartteamafrica",
+    instagramHandle: "@heartteamafrica",
+    hop: "Dr. Adelphina Ncheye, Head of Programs, HTAF"
   },
 };
 export type EventConfig = typeof event;

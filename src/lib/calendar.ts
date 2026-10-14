@@ -19,4 +19,6 @@ export const mapsUrl = () =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.mapQuery)}`;
 
 export const whatsappShareUrl = (siteUrl: string) =>
-  `https://wa.me/?text=${encodeURIComponent(`${event.kicker}: ${event.title}\n${siteUrl}`)}`;
+  `https://wa.me/?text=${encodeURIComponent(
+    `${event.title} – ${event.subtitle}\n${event.dateShort} · ${event.region}\n${siteUrl}`
+  )}`;

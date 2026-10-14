@@ -22,12 +22,13 @@ const empty = (configured: boolean, error?: string): Stats => ({
 
 // Expected column order of the Google Form response sheet:
 // A Timestamp | B Attendance | C Full name | D Country | E Organisation | F Title | G Contact | H Additional guests | I Dietary
-export async function getStats(): Promise<Stats> {
+export async function getStats(fresh = false): Promise<Stats> {
+  const cacheOpts = fresh ? { cache: "no-store" as const } : { next: { revalidate: 60 } };
   // Option A (no Google Cloud keys needed): an Apps Script web app attached to the response Sheet.
   const statsUrl = process.env.STATS_URL;
   if (statsUrl) {
     try {
-      const res = await fetch(statsUrl, { next: { revalidate: 60 } });
+      const res = await fetch(statsUrl, cacheOpts);
       if (!res.ok) throw new Error(`Stats endpoint ${res.status}`);
       const j = (await res.json()) as Partial<Stats>;
       return {
@@ -59,7 +60,7 @@ export async function getStats(): Promise<Stats> {
     const range = encodeURIComponent(process.env.GOOGLE_SHEET_RANGE || "Form Responses 1!A2:I");
     const res = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${range}`,
-      { headers: { Authorization: `Bearer ${token}` }, next: { revalidate: 60 } }
+      { headers: { Authorization: `Bearer ${token}` }, ...cacheOpts }
     );
     if (!res.ok) throw new Error(`Sheets API ${res.status}`);
     const { values = [] } = (await res.json()) as { values?: string[][] };
